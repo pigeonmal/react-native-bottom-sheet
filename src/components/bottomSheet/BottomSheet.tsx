@@ -1360,13 +1360,13 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
           if (containerHeight !== _previousContainerHeight) {
             animatedAnimationState.value = ANIMATION_STATE.RUNNING;
             animatedAnimationSource.value = ANIMATION_SOURCE.CONTAINER_RESIZE;
-            animatedNextPosition.value = snapPoints[0];
-            animatedNextPositionIndex.value = 0;
+            animatedNextPosition.value = nextPosition;
+            animatedNextPositionIndex.value =  animatedSnapPoints.value.indexOf(nextPosition);
 
-         /*    animationSource = ANIMATION_SOURCE.CONTAINER_RESIZE;
+            animationSource = ANIMATION_SOURCE.CONTAINER_RESIZE;
             animationConfig = {
               duration: 0,
-            }; */
+            };
 
           }
         }
