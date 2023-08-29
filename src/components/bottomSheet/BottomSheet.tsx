@@ -604,7 +604,6 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
       function handleOnAnimate(toPoint: number) {
         const snapPoints = animatedSnapPoints.value;
         const toIndex = snapPoints.indexOf(toPoint);
-
         print({
           component: BottomSheet.name,
           method: handleOnAnimate.name,
@@ -618,9 +617,10 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
           return;
         }
 
-        if (toIndex !== animatedCurrentIndex.value) {
+      //  if (toIndex !== animatedCurrentIndex.value) {
           _providedOnAnimate(animatedCurrentIndex.value, toIndex);
-        }
+      //  }
+        
       },
       [_providedOnAnimate, animatedSnapPoints, animatedCurrentIndex]
     );
@@ -1352,16 +1352,22 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
           nextPosition = getNextPosition();
         } else {
           nextPosition = snapPoints[animatedCurrentIndex.value];
-
+          
           /**
            * if snap points changes because of the container height change,
            * then we skip the snap animation by setting the duration to 0.
            */
           if (containerHeight !== _previousContainerHeight) {
-            animationSource = ANIMATION_SOURCE.CONTAINER_RESIZE;
+            animatedAnimationState.value = ANIMATION_STATE.RUNNING;
+            animatedAnimationSource.value = ANIMATION_SOURCE.CONTAINER_RESIZE;
+            animatedNextPosition.value = snapPoints[0];
+            animatedNextPositionIndex.value = 0;
+
+         /*    animationSource = ANIMATION_SOURCE.CONTAINER_RESIZE;
             animationConfig = {
               duration: 0,
-            };
+            }; */
+
           }
         }
         animateToPosition(nextPosition, animationSource, 0, animationConfig);
@@ -1398,7 +1404,6 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
           animatedContentGestureState.value === State.BEGAN ||
           animatedHandleGestureState.value === State.ACTIVE ||
           animatedHandleGestureState.value === State.BEGAN;
-
         if (
           /**
            * if keyboard state is equal to the previous state, then exit the method
@@ -1504,6 +1509,7 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
         _contentGestureState,
         _handleGestureState,
       }) => {
+
         /**
          * exit the method if animation state is not stopped.
          */
@@ -1547,7 +1553,6 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
               animatedIndex: _animatedIndex,
             },
           });
-
           animatedCurrentIndex.value = _animatedIndex;
           runOnJS(handleOnChange)(_animatedIndex);
         }
