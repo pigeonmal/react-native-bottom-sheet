@@ -1358,11 +1358,14 @@ const BottomSheetComponent = forwardRef<BottomSheet, BottomSheetProps>(
            * then we skip the snap animation by setting the duration to 0.
            */
           if (containerHeight !== _previousContainerHeight) {
-            animatedAnimationState.value = ANIMATION_STATE.RUNNING;
-            animatedAnimationSource.value = ANIMATION_SOURCE.CONTAINER_RESIZE;
-            animatedNextPosition.value = nextPosition;
-            animatedNextPositionIndex.value =  animatedSnapPoints.value.indexOf(nextPosition);
-
+            if(containerHeight < _previousContainerHeight) {
+              animatedAnimationState.value = ANIMATION_STATE.RUNNING;
+              animatedAnimationSource.value = ANIMATION_SOURCE.CONTAINER_RESIZE;
+              animatedNextPosition.value = nextPosition;
+              animatedNextPositionIndex.value =  animatedSnapPoints.value.indexOf(nextPosition);
+              return;
+            }
+        
             animationSource = ANIMATION_SOURCE.CONTAINER_RESIZE;
             animationConfig = {
               duration: 0,
